@@ -1,0 +1,1 @@
+-e git+https://github.com/alexeyNaidiuk/trading_bot.git@54c2b40c27a86cf3e4b534f860f993a894f4dd4c#egg=trading_bot
