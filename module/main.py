@@ -45,7 +45,6 @@ def strategy(buy_amt, SL=0.985, Target=1.02, open_position=False):
         order = client.create_order(symbol=asset, side='BUY', type='MARKET', quantity=qty)
         print(order)
         buyprice = float(order['fills'][0]['price'])
-        open_position = True
 
         while open_position:
             try:
@@ -67,5 +66,6 @@ def strategy(buy_amt, SL=0.985, Target=1.02, open_position=False):
         time.sleep(20)
 
 
-while True:
-    strategy(15)
+if __name__ == '__main__':
+    while True:
+        strategy(15)
