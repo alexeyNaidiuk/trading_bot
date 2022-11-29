@@ -1,3 +1,4 @@
+import logging
 import time
 
 import pandas as pd
@@ -28,13 +29,8 @@ def last_data(symbol, interval, lookback):
 
 
 def strategy(buy_amt, SL=0.985, Target=1.02, open_position=False):
-    try:
-        asset = top_coin()
-        df = last_data(asset, '1m', '120')
-    except:
-        time.sleep(61)
-        asset = top_coin()
-        df = last_data(asset, '1m', '120')
+    asset = top_coin()
+    df = last_data(asset, '1m', '120')
 
     qty = round(buy_amt / df.Close.iloc[-1], 1)
 
@@ -45,14 +41,14 @@ def strategy(buy_amt, SL=0.985, Target=1.02, open_position=False):
         order = client.create_order(symbol=asset, side='BUY', type='MARKET', quantity=qty)
         print(order)
         buyprice = float(order['fills'][0]['price'])
+        open_position = True
 
         while open_position:
             try:
                 df = last_data(asset, '1m', '2')
-            except:
-                print('Restart after 1 min')
-                time.sleep(61)
-                df = last_data(asset, '1m', '2')
+            except Exception as error:
+                logging.exception(error)
+                break
 
             print(f'Price ' + str(df.Close[-1]))
             print(f'Target ' + str(buyprice * Target))
@@ -64,8 +60,3 @@ def strategy(buy_amt, SL=0.985, Target=1.02, open_position=False):
     else:
         print('No find')
         time.sleep(20)
-
-
-if __name__ == '__main__':
-    while True:
-        strategy(15)
